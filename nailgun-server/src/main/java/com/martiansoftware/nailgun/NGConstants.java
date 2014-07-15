@@ -88,6 +88,11 @@ public class NGConstants {
     public static final byte CHUNKTYPE_HEARTBEAT = 'H';
 
     /**
+     * Chunk type marker for client password.
+     */
+    public static final byte CHUNKTYPE_PASSWORD = 'P';
+
+    /**
      * Server version number
      */
     public static final String VERSION;
