@@ -188,13 +188,9 @@ public class NGServer implements Runnable {
         this.heartbeatTimeoutMillis = timeoutMillis;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getPassword()
     {
-        return password;
+        return System.getenv("NAILGUN_PASSWORD");
     }
 
     /**
@@ -469,7 +465,7 @@ public class NGServer implements Runnable {
      */
     public static void main(String[] args) throws NumberFormatException, UnknownHostException {
 
-        if (args.length > 3) {
+        if (args.length > 2) {
             usage();
             return;
         }
@@ -478,7 +474,6 @@ public class NGServer implements Runnable {
         InetAddress serverAddress = null;
         int port = NGConstants.DEFAULT_PORT;
         int timeoutMillis = NGConstants.HEARTBEAT_TIMEOUT_MILLIS;
-        String password = null;
 
         // parse the command line parameters, which
         // may be an inetaddress to bind to, a port number,
@@ -505,16 +500,12 @@ public class NGServer implements Runnable {
             if (portPart != null) {
                 port = Integer.parseInt(portPart);
             }
-            if (args.length >= 2) {
+            if (args.length == 2) {
                 timeoutMillis = Integer.parseInt(args[1]);
-            }
-            if (args.length >= 3) {
-                password = args[2];
             }
         }
 
         NGServer server = new NGServer(serverAddress, port, DEFAULT_SESSIONPOOLSIZE, timeoutMillis);
-        server.setPassword(password);
         Thread t = new Thread(server);
         t.setName("NGServer(" + serverAddress + ", " + port + ")");
         t.start();
